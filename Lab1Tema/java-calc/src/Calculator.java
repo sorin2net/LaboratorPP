@@ -21,14 +21,14 @@ public class Calculator extends JFrame{
     };
 
     JButton operators[] ={
-            new JButton(" + "), //0 finalI
-            new JButton(" - "), //1
-            new JButton(" * "), //2
-            new JButton(" / "), //3
-            new JButton(" = "), //4
-            new JButton(" C "), //5
-            new JButton(" ( "), //6
-            new JButton(" ) ") //7
+            new JButton(" + "), 
+            new JButton(" - "), 
+            new JButton(" * "), 
+            new JButton(" / "), 
+            new JButton(" = "), 
+            new JButton(" C "), 
+            new JButton(" ( "), 
+            new JButton(" ) ") 
     };
 
     String oper_values[] ={"+", "-", "*", "/", "=", "", "(", ")"}; 
