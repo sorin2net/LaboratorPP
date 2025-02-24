@@ -96,7 +96,7 @@ public class Calculator extends JFrame{
         }
     }
 
-    // Prelucram din infinalIxata in postfinalIxata
+    // Prelucram din infixata in postfixata
     public String postfinalIx(String expresie){
         StringBuilder rez=new StringBuilder();
         Stack<Character> stack=new Stack<>();
