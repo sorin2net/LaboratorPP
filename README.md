@@ -1,2 +1,2 @@
-# Laborator1-PP
+# Laboratoare PP
 Dumitriu Denis-Gabriel 1212A
