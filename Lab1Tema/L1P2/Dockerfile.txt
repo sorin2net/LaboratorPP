@@ -1,0 +1,20 @@
+# Folosește imaginea oficială Java
+FROM openjdk:11
+
+# Setează directorul de lucru în container
+WORKDIR /app
+
+# Copiază codul sursă și fișierul text în container
+COPY . .
+
+# Instalează Git în container
+RUN apt-get update && apt-get install -y git
+
+# Inițializează repository-ul Git și face primul commit
+RUN git init && git config --global user.email "you@example.com" && git config --global user.name "Your Name"
+
+# Compilează codul Java
+RUN javac Main.java
+
+# Definește punctul de start al containerului
+CMD ["sh", "entrypoint.sh"]
