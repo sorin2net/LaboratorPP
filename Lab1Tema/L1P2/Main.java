@@ -32,7 +32,7 @@ public class Main
     {
         try
         {
-            String filePath="fisier.txt";
+            String filePath="fisierulmeu.txt";
             String continut=read(filePath);
             System.out.println("Continut initial:\n"+continut);
             continut=rmv_semne_pct(continut);
