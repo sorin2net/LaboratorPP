@@ -1,0 +1,77 @@
+package org.example
+
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
+import java.io.BufferedWriter
+import java.io.FileWriter
+import java.io.IOException
+
+// ADT pentru reprezentarea unui item RSS
+data class RSSItem(val title: String, val link: String, val description: String, val pubDate: String) {
+    override fun toString(): String {
+        return "Titlu: $title\nLink: $link\nData publicării: $pubDate\n"
+    }
+}
+
+// ADT pentru canalul RSS
+class RSSFeed(val title: String, val link: String, val description: String) {
+    private val items: MutableList<RSSItem> = mutableListOf()
+
+    fun addItem(item: RSSItem) {
+        items.add(item)
+    }
+
+    fun printFeed() {
+        println("Flux RSS: $title")
+        println("Link: $link")
+        println("Descriere: $description\n")
+        items.forEach { println(it) }
+    }
+
+    fun writeToFile(filename: String) {
+        try {
+            BufferedWriter(FileWriter(filename)).use { writer ->
+                writer.write("Flux RSS: $title\n")
+                writer.write("Link: $link\n")
+                writer.write("Descriere: $description\n\n")
+                items.forEach { writer.write(it.toString() + "\n") }
+                println("Datele au fost salvate în fișierul: $filename")
+            }
+        } catch (e: IOException) {
+            println("Eroare la scrierea în fișier: ${e.message}")
+        }
+    }
+}
+
+fun main() {
+    val url = "https://www.gandul.ro/rss"
+
+    try {
+        val doc: Document = Jsoup.connect(url).get()
+        val channel: Element = doc.selectFirst("channel") ?: throw IOException("Elementul channel nu a fost găsit")
+
+        val feedTitle = channel.selectFirst("title")?.text() ?: "Titlu necunoscut"
+        val feedLink = channel.selectFirst("link")?.text() ?: "Link necunoscut"
+        val feedDescription = channel.selectFirst("description")?.text() ?: "Descriere necunoscută"
+
+        val feed = RSSFeed(feedTitle, feedLink, feedDescription)
+
+        val items: Elements = channel.select("item")
+        for (item in items) {
+            val itemTitle = item.selectFirst("title")?.text() ?: "Titlu necunoscut"
+            val itemLink = item.selectFirst("link")?.text() ?: "Link necunoscut"
+            val itemDescription = item.selectFirst("description")?.text() ?: "Descriere necunoscută"
+
+            val itemPubDate = item.selectFirst("pubDate")?.text()?.trim().takeUnless { it.isNullOrEmpty() } ?: "Data necunoscută"
+
+            feed.addItem(RSSItem(itemTitle, itemLink, itemDescription, itemPubDate))
+        }
+
+        feed.printFeed()
+        feed.writeToFile("Continut.txt")
+    } catch (e: IOException) {
+        println("Eroare la preluarea sau procesarea fluxului RSS: ${e.message}")
+    }
+}
